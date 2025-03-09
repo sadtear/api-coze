@@ -73,7 +73,8 @@ def home():
     return jsonify({"message": "API服务正常运行中", "endpoints": ["/api1", "/api2", "/api3", "/api4"]}), 200
 
 # Vercel无服务器函数入口点
-def handler(request):
+# 修改handler函数
+def handler(request, response):
     # 获取请求路径
     path = request.path
     
@@ -131,8 +132,6 @@ def handler(request):
         data = {"message": "API服务正常运行中", "endpoints": ["/api1", "/api2", "/api3", "/api4"]}
     
     # 创建响应
-    return Response(
-        json.dumps(data, ensure_ascii=False),
-        mimetype="application/json",
-        status=200
-    )
+    response.status = 200
+    response.headers["Content-Type"] = "application/json; charset=utf-8"
+    return json.dumps(data, ensure_ascii=False)
